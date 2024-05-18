@@ -91,70 +91,67 @@ void display_inventory(HashTable* table) {
         }
     }
 }
-
 int main() {
     HashTable* table = create_table();
-    
-    printf("1.INSERT\n2.SEARCH\n3.DELETE\n4.DISPLAY\n");
-    printf("choose your option: ");
-    int n;
-    scanf("%d",&n);
-    switch(n){
-        case 1:
-        char itemname[50],ids,quan;
-        printf("ENTER THE DETAILS:");
-        int y=1;
-        
-        while(y){
-            printf("\nProduct name: ");
-            scanf("%s",&itemname);
-            printf("\nProduct id: ");
-            scanf("%d",&ids);
-            printf("\nqQuantity: ");
-            scanf("%d",&quan);
+    while(1){
+        printf("----------------------------------------------");
+        printf("\n1.INSERT\n2.SEARCH\n3.DELETE\n4.DISPLAY\n");
+        printf("----------------------------------------------");
+        printf("\nchoose your option:  ");
+        int n;
+        scanf("%d",&n);
+        switch(n){
+            case 1:
+            char itemname[50];
+            int ids,quan;
+            printf("ENTER THE DETAILS");
+            int y=1;
             
-            insert_item(table, itemname, quan, ids);
-            char x;
-            printf("\nADD MORE ITEMS?(type y else n) ");
-            scanf("%s",&x);
-            if(x==y){
-                y=1;
-            }
-            else{
-                y=0;
-            }}
+                printf("\nProduct name: ");
+                scanf("%s",&itemname);
+                printf("\nProduct id: ");
+                scanf("%d",&ids);
+                printf("\nQuantity: ");
+                scanf("%d",&quan);
+                
+           
+                insert_item(table, itemname, quan, ids);
+            
+            
+                
+                printf("\nINSERTION COMPLETED SUCCESSFULLY");
+                   
             break;
     
-        case 2:
-        int j;
-        printf("Enter product id to search: ");
-        scanf("%d",&j);
-        Item* item = search_item(table, j);
-        if (item != NULL) {
-        printf("Found item with ID 2: Name: %s, Quantity: %d\n", item->name, item->quantity);}
-        else {
-        printf("Item with ID 2 not found.\n");} 
-        break;
+            case 2:
+            int j;
+            printf("Enter product id to search: ");
+            scanf("%d",&j);
+            Item* item = search_item(table, j);
+            if (item != NULL) {
+                printf("Found item with ID %d: Name: %s, Quantity: %d\n", j,item->name, item->quantity);}
+            else {
+                printf("Item with ID %d not found.\n",j);} 
+            break;
         
-        case 3:
-        int g;
-        printf("product id to be deleted: ");
-        scanf("%d",&g);
-        delete_item(table, g);
+            case 3:
+            int g;
+            printf("product id to be deleted: ");
+            scanf("%d",&g);
+            delete_item(table, g);
        // printf("After deleting item with ID 2:\n");
        // display_inventory(table);
-        printf("Product deleted");
-        free(table);
-        break;
+            printf("Product deleted\n");
+            free(table);
+            break;
         
-        case 4:
-        display_inventory(table);
-        break;
+            case 4:
+            display_inventory(table);
+            break;
         
-        default:
-        printf("Enter a proper option,,,");
-        break;
-        
+            default:
+            printf("Enter a proper option,,,");
+            break;
 
     
 
@@ -163,7 +160,7 @@ int main() {
 
     
 
-    
-    return 0;
+
+}
 }
 }
