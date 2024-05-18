@@ -1,0 +1,169 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define TABLE_SIZE 100
+
+typedef struct Item {
+    char name[50];
+    int quantity;
+    int id;
+    struct Item* next;  // for handling collisions with chaining
+} Item;
+
+typedef struct HashTable {
+    Item* items[TABLE_SIZE];
+} HashTable;
+
+unsigned int hash(int id) {
+    return id % TABLE_SIZE;
+}
+HashTable* create_table() {
+    HashTable* table = (HashTable*)malloc(sizeof(HashTable));
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        table->items[i] = NULL;
+    }
+    return table;
+}
+Item* create_item(char* name, int quantity, int id) {
+    Item* newItem = (Item*)malloc(sizeof(Item));
+    strcpy(newItem->name, name);
+    newItem->quantity = quantity;
+    newItem->id = id;
+    newItem->next = NULL;
+    return newItem;
+}
+void insert_item(HashTable* table, char* name, int quantity, int id) {
+    unsigned int index = hash(id);
+    Item* newItem = create_item(name, quantity, id);
+
+    if (table->items[index] == NULL) {
+        table->items[index] = newItem;
+    } else {
+        Item* temp = table->items[index];
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = newItem;
+    }
+}
+Item* search_item(HashTable* table, int id) {
+    unsigned int index = hash(id);
+    Item* temp = table->items[index];
+
+    while (temp != NULL && temp->id != id) {
+        temp = temp->next;
+    }
+    return temp;
+}
+void delete_item(HashTable* table, int id) {
+    unsigned int index = hash(id);
+    Item* temp = table->items[index];
+    Item* prev = NULL;
+
+    while (temp != NULL && temp->id != id) {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        printf("Item with ID %d not found.\n", id);
+        return;
+    }
+
+    if (prev == NULL) {
+        table->items[index] = temp->next;
+    } else {
+        prev->next = temp->next;
+    }
+    free(temp);
+}
+void display_inventory(HashTable* table) {
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        Item* temp = table->items[i];
+        if (temp != NULL) {
+            printf("Index %d:\n", i);
+            while (temp != NULL) {
+                printf("ID: %d, Name: %s, Quantity: %d\n", temp->id, temp->name, temp->quantity);
+                temp = temp->next;
+            }
+            printf("\n");
+        }
+    }
+}
+
+int main() {
+    HashTable* table = create_table();
+    
+    printf("1.INSERT\n2.SEARCH\n3.DELETE\n4.DISPLAY\n");
+    printf("choose your option: ");
+    int n;
+    scanf("%d",&n);
+    switch(n){
+        case 1:
+        char itemname[50],ids,quan;
+        printf("ENTER THE DETAILS:");
+        int y=1;
+        
+        while(y){
+            printf("\nProduct name: ");
+            scanf("%s",&itemname);
+            printf("\nProduct id: ");
+            scanf("%d",&ids);
+            printf("\nqQuantity: ");
+            scanf("%d",&quan);
+            
+            insert_item(table, itemname, quan, ids);
+            char x;
+            printf("\nADD MORE ITEMS?(type y else n) ");
+            scanf("%s",&x);
+            if(x==y){
+                y=1;
+            }
+            else{
+                y=0;
+            }}
+            break;
+    
+        case 2:
+        int j;
+        printf("Enter product id to search: ");
+        scanf("%d",&j);
+        Item* item = search_item(table, j);
+        if (item != NULL) {
+        printf("Found item with ID 2: Name: %s, Quantity: %d\n", item->name, item->quantity);}
+        else {
+        printf("Item with ID 2 not found.\n");} 
+        break;
+        
+        case 3:
+        int g;
+        printf("product id to be deleted: ");
+        scanf("%d",&g);
+        delete_item(table, g);
+       // printf("After deleting item with ID 2:\n");
+       // display_inventory(table);
+        printf("Product deleted");
+        free(table);
+        break;
+        
+        case 4:
+        display_inventory(table);
+        break;
+        
+        default:
+        printf("Enter a proper option,,,");
+        break;
+        
+
+    
+
+
+   
+
+    
+
+    
+    return 0;
+}
+}
